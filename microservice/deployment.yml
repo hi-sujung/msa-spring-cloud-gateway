@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: spring-cloud-gateway
-          image: your-dockerhub-username/spring-cloud-gateway:latest # 실제 이미지로 변경
+          image: julia2039/spring-cloud-gateway:latest # 실제 이미지로 변경
           ports:
             - containerPort: 8080
           env:
