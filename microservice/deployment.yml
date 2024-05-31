@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-cloud-gateway
+  labels:
+    app: spring-cloud-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-cloud-gateway
+  template:
+    metadata:
+      labels:
+        app: spring-cloud-gateway
+    spec:
+      containers:
+        - name: spring-cloud-gateway
+          image: your-dockerhub-username/spring-cloud-gateway:latest # 실제 이미지로 변경
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s # Kubernetes 환경에 맞게 프로필 설정
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: spring-cloud-gateway-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-cloud-gateway-svc
+spec:
+  selector:
+    app: spring-cloud-gateway
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
