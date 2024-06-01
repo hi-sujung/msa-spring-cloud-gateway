@@ -5,10 +5,14 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
 
+@Slf4j
+@Component
 //Jwt 토큰 방식을 사용할 때 필요한 기능들을 정리해놓은 클래스
 //새로운 Jwt 토큰 발급, Jwt 토큰의 Claim에서 "loginId" 꺼내기, 만료시간 체크 기능 수행
 public class JwtTokenUtil {
@@ -33,6 +37,12 @@ public class JwtTokenUtil {
 
     //Claims에서 loginId 꺼내기
     public static String getLoginId(String token, String secretKey) {
+        try {
+            Claims claims = extractClaims(token, secretKey);
+            log.info(claims.get("loginId").toString());
+        } catch (Exception e) {
+            log.error("Exception while extracting claims: {}", e.getMessage());
+        }
         return extractClaims(token, secretKey).get("loginId").toString();
     }
 

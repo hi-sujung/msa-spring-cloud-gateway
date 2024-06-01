@@ -2,6 +2,8 @@ package com.hisujung.microservice.filter;
 
 import com.hisujung.microservice.jwt.JwtTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
@@ -18,6 +20,7 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
     @Autowired
@@ -27,6 +30,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
     public AuthorizationHeaderFilter() {
         super(Config.class);
+        log.info("AuthorizationHeaderFilter initialized");
     }
 
     public static class Config {
@@ -35,7 +39,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
     @Override
     public GatewayFilter apply(Config config) {
-
+        log.info("AuthorizationHeaderFilter applied");
         return (exchange, chain) -> {
             String token = exchange.getRequest().getHeaders().get("Authorization").get(0).substring(7); // 헤더의 토큰 파싱 (Bearer 제거)
             String userId = jwtUtil.getLoginId(token, secretKey); // 파싱된 토큰의 claim을 추출해 아이디 값을 가져온다.
