@@ -35,6 +35,7 @@ kind: Service
 metadata:
   name: spring-cloud-gateway-svc
 spec:
+  type: LoadBalancer
   selector:
     app: spring-cloud-gateway
   ports:
