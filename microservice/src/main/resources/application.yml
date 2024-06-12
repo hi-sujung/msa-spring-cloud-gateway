@@ -1,1 +1,23 @@
 # 비워둠
+spring:
+  cloud:
+    gateway:
+      routes:
+        # - id: msa-user
+        #   uri: http://localhost:8080
+        #   predicates:
+        #     - Path=/member/login
+        #   filters:
+        #     - CreateTokenFilter  # 필요시 인증/인가 필터 추가
+        - id: msa-portfolio
+          uri: http://portfolio-service:3001
+          predicates:
+            - Path=/portfolio/**
+          filters:
+            - AuthorizationHeaderFilter  # 필요시 인증/인가 필터 추가
+        - id: msa-notice
+          uri: http://notice-service:8080
+          predicates:
+            - Path=/notice/**
+          filters:
+            - AuthorizationHeaderFilter  # 필요시 인증/인가 필터 추가
